@@ -48,6 +48,8 @@ about:
   dev_url: https://pytest-pyfakefs.readthedocs.io/en/latest/
 
 extra:
+  anaconda-services:
+    ref: https://anaconda.zendesk.com/agent/tickets/34583
+
   recipe-maintainers:
-    - tswast
-    - thewchan
+    - ianaobi
