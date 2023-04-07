@@ -1,5 +1,5 @@
 {% set name = "pyfakefs" %}
-{% set version = "5.1.0" %}
+{% set version = "5.0.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,17 +7,18 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 316c6026640d14a6b4fbde71fd9674576d1b5710deda8fabde8aad51d785dbc3
+  sha256: 19d1d8f1ee520891d78b6ed05c2078e0792d545f83dee33461fbaa5cc72e187d
 
 build:
   noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install --no-deps . -vv
 
 requirements:
   host:
     - pip
     - python >=3.7
+    - wheel
   run:
     - python >=3.7
 
@@ -46,6 +47,7 @@ about:
     and MacOS.
 
 extra:
+  anaconda-services:
+    ref: https://anaconda.zendesk.com/agent/tickets/34583
   recipe-maintainers:
-    - tswast
-    - thewchan
+    - anaobi
