@@ -12,12 +12,13 @@ source:
 build:
   noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install --no-deps . -vv
 
 requirements:
   host:
     - pip
     - python >=3.7
+    - wheel
   run:
     - python >=3.7
 
@@ -46,5 +47,7 @@ about:
     and MacOS.
 
 extra:
+  anaconda-services:
+    ref: https://anaconda.zendesk.com/agent/tickets/34583
   recipe-maintainers:
     - anaobi
