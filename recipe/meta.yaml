@@ -1,5 +1,5 @@
 {% set name = "pyfakefs" %}
-{% set version = "5.1.0" %}
+{% set version = "5.6.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,35 +7,42 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 316c6026640d14a6b4fbde71fd9674576d1b5710deda8fabde8aad51d785dbc3
+  sha256: 7a549b32865aa97d8ba6538285a93816941d9b7359be2954ac60ec36b277e879
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<37]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
     - pip
-    - python >=3.7
+    - python
+    - setuptools
+    - wheel
   run:
-    - python >=3.7
+    - python
 
 test:
   source_files:
-    - pyfakefs
+    - pyfakefs/tests
+    - pyfakefs/pytest_tests
   imports:
     - pyfakefs
   commands:
     - pip check
+    # tox.ini#L12-L14
     - python -m pyfakefs.tests.all_tests
+    - python -m pyfakefs.tests.all_tests_without_extra_packages
+    - python -m pytest pyfakefs/pytest_tests/pytest_plugin_test.py
   requires:
     - pip
+    - pytest
 
 about:
-  home: https://github.com/jmcgeheeiv/pyfakefs
-  doc_url: http://jmcgeheeiv.github.io/pyfakefs/
+  home: https://github.com/pytest-dev/pyfakefs
   license: Apache-2.0
+  license_family: Apache
   license_file: COPYING
   summary: A fake file system that mocks the Python file system modules.
   description: |
@@ -43,7 +50,9 @@ about:
     modules. Using pyfakefs, your tests operate on a fake file system in
     memory without touching the real disk. The software under test requires
     no modification to work with pyfakefs. pyfakefs works with Linux, Windows
-    and MacOS.
+    and macOS.
+  doc_url: https://pytest-pyfakefs.readthedocs.io
+  dev_url: https://github.com/pytest-dev/pyfakefs
 
 extra:
   recipe-maintainers:
