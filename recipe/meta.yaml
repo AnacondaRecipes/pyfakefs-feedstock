@@ -37,7 +37,6 @@ test:
     - pytest >=6.2.5
   commands:
     - pip check
-    # Set PYTHONPATH to use local pyfakefs directory for tests
     - cd gh
     - python -m pyfakefs.tests.all_tests
     - python -m pyfakefs.tests.all_tests_without_extra_packages
