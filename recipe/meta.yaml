@@ -39,7 +39,8 @@ test:
     - pip check
     # Set PYTHONPATH to use local pyfakefs directory for tests
     - cd gh
-    - PYTHONPATH=. pytest pyfakefs/tests -v -k "not test_exists"
+    - PYTHONPATH=. pytest pyfakefs/tests -v -k "not test_exists"  # [py>=310]
+    - PYTHONPATH=. pytest pyfakefs/tests -v -k "not (test_exists or test_realpath_allow_missing)"  # [py<310]
     - PYTHONPATH=. pytest pyfakefs/pytest_tests -v
 
 about:
