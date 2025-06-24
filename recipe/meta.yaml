@@ -31,6 +31,10 @@ test:
   requires:
     - pip
     - pytest >=6.2.5
+    - pytest-xdist
+    - pandas
+    - xlrd
+    - openpyxl
   commands:
     - pip check
     # Set PYTHONPATH to use local pyfakefs directory for tests.
@@ -40,7 +44,7 @@ test:
     # that get cleaned up after the fake filesystem is restored, causing FileNotFoundError during cleanup.
     # These warnings are informative and don't cause test failures.
     #
-    # pyfakefs/tests/fake_pathlib_test.py::SkipPathlibTest::test_exists fails for py39 on osx with 'AssertionError: False is not true'.
+    # pyfakefs/tests/fake_pathlib_test.py::SkipPathlibTest::test_exists fails on osx with 'AssertionError: False is not true'.
     - pytest pyfakefs/tests -v -k "not test_exists" -W "ignore::pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception"  # [unix]
     - pytest pyfakefs/pytest_tests -v  -W "ignore::pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception"  # [unix]
     - pytest pyfakefs/tests -v -W ignore::pytest.PytestUnraisableExceptionWarning  # [win]
