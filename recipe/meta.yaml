@@ -1,5 +1,5 @@
 {% set name = "pyfakefs" %}
-{% set version = "5.9.0" %}
+{% set version = "5.9.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,11 +7,7 @@ package:
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: a734fb70a55acdda41469d5ea8e169b0a37bf28618326722adc09faeb65b0f1d
-  # For the test suite
-  - url: https://github.com/pytest-dev/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 3c15b70c3e7bc92c87327380e643f6c1bb636172c9d987ffa2fe2585a6ca3cad
-    folder: gh
+    sha256: ca02a1441dc77d7512bebfe4224b32f2127e83c45672f5fe2c02c33d4284bc70
 
 build:
   number: 0
@@ -31,20 +27,20 @@ test:
   imports:
     - pyfakefs
   source_files:
-    - gh/pyfakefs
+    - pyfakefs
   requires:
     - pip
     - pytest >=6.2.5
   commands:
     - pip check
-    # Set PYTHONPATH to use local pyfakefs directory for tests
-    - cd gh
-    - PYTHONPATH=. pytest pyfakefs/tests -v -k "not test_exists"  # [py>=310 and unix]
-    - PYTHONPATH=. pytest pyfakefs/tests -v -k "not (test_exists or test_realpath_allow_missing)"  # [py<310 and unix]
-    - PYTHONPATH=. pytest pyfakefs/pytest_tests -v  # [unix]
-    - set PYTHONPATH=. && pytest pyfakefs/tests -v -k "not test_exists"  # [py>=310 and win]
-    - set PYTHONPATH=. && pytest pyfakefs/tests -v -k "not (test_exists or test_realpath_allow_missing)"  # [py<310 and win]
-    - set PYTHONPATH=. && pytest pyfakefs/pytest_tests -v  # [win]
+    # Set PYTHONPATH to use local pyfakefs directory for tests.
+    # Warnings occur when pyfakefs's pause/resume functionality creates real temporary files
+    # that get cleaned up after the fake filesystem is restored, causing FileNotFoundError during cleanup.
+    # These warnings are informative and don't cause test failures.
+    - PYTHONPATH=. pytest pyfakefs/tests -v -W "ignore::pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception"  # [unix]
+    - PYTHONPATH=. pytest pyfakefs/pytest_tests -v  -W "ignore::pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception"  # [unix]
+    - set PYTHONPATH=. && pytest pyfakefs/tests -v -W ignore::pytest.PytestUnraisableExceptionWarning  # [win]
+    - set PYTHONPATH=. && pytest pyfakefs/pytest_tests -v  -W "ignore::pytest.PytestUnraisableExceptionWarning:_pytest.unraisableexception"  # [win]
 
 about:
   home: https://github.com/pytest-dev/pyfakefs
