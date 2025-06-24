@@ -32,9 +32,6 @@ test:
     - pip
     - pytest >=6.2.5
     - pytest-xdist
-    - pandas
-    - xlrd
-    - openpyxl
   commands:
     - pip check
     # Set PYTHONPATH to use local pyfakefs directory for tests.
