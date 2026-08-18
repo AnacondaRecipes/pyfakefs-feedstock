@@ -1,13 +1,23 @@
 {% set name = "pyfakefs" %}
-{% set version = "6.0.0" %}
+{% set version = "6.2.0" %}
+{% set deselect_tests = " --deselect=tests/fake_filesystem_unittest_test.py::AdditionalSkipNamesTest::test_open_succeeds" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_filesystem_unittest_test.py::AdditionalSkipNamesModuleTest::test_open_succeeds"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_filesystem_test.py::FakePathModuleTest::test_realpath_allow_missing"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_open_test.py::SkipOpenTest::test_open_in_skipped_module"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_exists"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_open_in_skipped_module"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_read"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/fake_pathlib_test.py::FakeFilesystemChmodTest::test_is_file_for_unreadable_dir_windows"' %}
 
+# >   raise OSError(err_no, message, filename)
+# E   FileNotFoundError: [Errno 2] No such file or directory: '$PREFIX/lib/python3.10/site-packages/pyfakefs/tests/skipped_pathlib.py'
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 059fd0b2174bfeed499ecb0a59bccff557f267cc6d885afc0e5b76e78b6d50da
+    sha256: e59a36db447bf509ce9c97ab3d1510c08cc51895c5311325a560a5e5b5dc1940
 
 build:
   number: 0
@@ -29,16 +39,6 @@ requirements:
     - xlrd >=2.0.1
     - openpyxl >=3.1.5
 
-# >   raise OSError(err_no, message, filename)
-# E   FileNotFoundError: [Errno 2] No such file or directory: '$PREFIX/lib/python3.10/site-packages/pyfakefs/tests/skipped_pathlib.py'
-{% set deselect_tests = " --deselect=tests/fake_filesystem_unittest_test.py::AdditionalSkipNamesTest::test_open_succeeds" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_filesystem_unittest_test.py::AdditionalSkipNamesModuleTest::test_open_succeeds" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_filesystem_test.py::FakePathModuleTest::test_realpath_allow_missing" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_open_test.py::SkipOpenTest::test_open_in_skipped_module" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_exists" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_open_in_skipped_module" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_pathlib_test.py::SkipPathlibTest::test_read" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/fake_pathlib_test.py::FakeFilesystemChmodTest::test_is_file_for_unreadable_dir_windows" %}
 test:
   imports:
     - pyfakefs
